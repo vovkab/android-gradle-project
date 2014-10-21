@@ -1,0 +1,64 @@
+# COMMON CONFIGURATION
+
+android_resource(
+  name = 'main_res',
+  res = 'src/main/res',
+  package = 'com.example.com.myapplication',
+  visibility = [ 'PUBLIC' ],
+)
+
+keystore (
+  name = 'debug_keystore',
+  store = 'keystore/debug.keystore',
+  properties = 'keystore/debug.keystore.properties',
+)
+
+# RELEASE CONFIGURATION
+
+android_binary (
+  name = 'release_bin',
+  manifest = 'src/main/AndroidManifest.xml',
+  target = 'android-19',
+  keystore = ':debug_keystore',
+  deps = [':release_src', ':main_res', ':release_res']
+)
+
+android_library(
+  name = 'release_src',
+  srcs = glob(['src/main/java/**/*.java']),
+  deps = [':main_res', ':release_res'],
+  visibility = [ 'PUBLIC' ],
+)
+
+android_resource(
+  name = 'release_res',
+  res = 'src/release/res',
+  package = 'com.example.com.myapplication',
+  deps = [':main_res'],
+  visibility = [ 'PUBLIC' ],
+)
+
+# DEBUG CONFIGURATION
+
+android_binary (
+  name = 'debug_bin',
+  manifest = 'src/main/AndroidManifest.xml',
+  target = 'android-19',
+  keystore = ':debug_keystore',
+  deps = [':debug_src', ':main_res', ':debug_res']
+)
+
+android_library(
+  name = 'debug_src',
+  srcs = glob(['src/main/java/**/*.java']),
+  deps = [':main_res', ':debug_res'],
+  visibility = [ 'PUBLIC' ],
+)
+
+android_resource(
+  name = 'debug_res',
+  res = 'src/debug/res',
+  package = 'com.example.com.myapplication',
+  deps = [':main_res'],
+  visibility = [ 'PUBLIC' ],
+)
